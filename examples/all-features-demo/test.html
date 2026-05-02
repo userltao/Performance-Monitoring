@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDK 所有功能演示</title>
+  <script src="../../dist/monitor.js"></script>
+  <script>
+    monitor.init({
+      url: 'http://localhost:8080/reportData'
+    })
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 40px;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 30px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: #fafafa;
+    }
+
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 24px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-danger {
+      background: #f56565;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #e53e3e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+    }
+
+    .btn-success {
+      background: #48bb8a;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #38a169;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(72, 187, 138, 0.4);
+    }
+
+    .btn-warning {
+      background: #ed8936;
+      color: white;
+    }
+
+    .btn-warning:hover {
+      background: #dd6b20;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(237, 137, 54, 0.4);
+    }
+
+    .scroll-container {
+      height: 300px;
+      overflow-y: auto;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 20px;
+      background: white;
+    }
+
+    .scroll-item {
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin-bottom: 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .image-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .image-item {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 3px solid #667eea;
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #48bb8a;
+      margin-right: 8px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .info-box p {
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .test-item {
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid #48bb8a;
+    }
+
+    .test-item strong {
+      color: #667eea;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🚀 前端监控 SDK 所有功能演示</h1>
+
+    <!-- 错误监控部分 -->
+    <div class="section">
+      <h2>❌ 错误监控功能</h2>
+
+      <div class="test-item">
+        <strong>1. JavaScript 运行时错误</strong>
+        <p>点击按钮会抛出一个 JavaScript 错误</p>
+        <button class="btn-danger" onclick="triggerJSError()">触发 JS 错误</button>
+      </div>
+
+      <div class="test-item">
+        <strong>2. Promise 错误</strong>
+        <p>点击按钮会创建一个被拒绝的 Promise 且不处理</p>
+        <button class="btn-danger" onclick="triggerPromiseError()">触发 Promise 错误</button>
+      </div>
+
+      <div class="test-item">
+        <strong>3. 控制台错误</strong>
+        <p>点击按钮会调用 console.error</p>
+        <button class="btn-danger" onclick="triggerConsoleError()">触发控制台错误</button>
+      </div>
+
+      <div class="test-item">
+        <strong>4. 资源加载错误</strong>
+        <p>下方会尝试加载一个不存在的图片和脚本</p>
+        <button class="btn-danger" onclick="loadErrorResources()">加载错误资源</button>
+        <div id="error-resources-container"></div>
+      </div>
+
+      <div class="test-item">
+        <strong>5. 手动上报错误</strong>
+        <p>手动调用 SDK 的 report 方法上报错误</p>
+        <button class="btn-primary" onclick="manualReportError()">手动上报错误</button>
+      </div>
+    </div>
+
+    <!-- 性能监控部分 -->
+    <div class="section">
+      <h2>📊 性能监控功能</h2>
+
+      <div class="info-box">
+        <p><span class="status-indicator"></span>性能监控已自动开始收集数据</p>
+        <p>SDK 会自动监控以下性能指标：</p>
+        <ul style="margin-left: 20px; margin-top: 10px;">
+          <li>页面加载时间 (Navigation Timing)</li>
+          <li>首次绘制 (FP) 和 首次内容绘制 (FCP)</li>
+          <li>最大内容绘制 (LCP)</li>
+          <li>首次输入延迟 (FID)</li>
+          <li>累积布局偏移 (CLS)</li>
+          <li>FPS (帧率)</li>
+          <li>XHR 和 Fetch 请求</li>
+          <li>首屏加载时间</li>
+        </ul>
+      </div>
+
+      <div class="test-item">
+        <strong>6. XHR 网络请求</strong>
+        <p>点击按钮会发起多个 XHR 请求</p>
+        <button class="btn-success" onclick="makeXHRRequests()">发起 XHR 请求</button>
+      </div>
+
+      <div class="test-item">
+        <strong>7. Fetch 网络请求</strong>
+        <p>点击按钮会发起多个 Fetch 请求</p>
+        <button class="btn-success" onclick="makeFetchRequests()">发起 Fetch 请求</button>
+      </div>
+
+      <div class="test-item">
+        <strong>8. 慢资源加载</strong>
+        <p>模拟加载大量图片资源</p>
+        <button class="btn-warning" onclick="loadManyImages()">加载大量图片</button>
+        <div id="image-container" class="image-container" style="margin-top: 15px;"></div>
+      </div>
+    </div>
+
+    <!-- 行为监控部分 -->
+    <div class="section">
+      <h2>🖱️ 用户行为监控功能</h2>
+
+      <div class="test-item">
+        <strong>9. 点击事件监控</strong>
+        <p>点击下方的按钮，SDK 会记录点击行为</p>
+        <div class="button-group">
+          <button class="btn-primary">按钮 1</button>
+          <button class="btn-success">按钮 2</button>
+          <button class="btn-warning">按钮 3</button>
+          <button class="btn-danger">按钮 4</button>
+        </div>
+      </div>
+
+      <div class="test-item">
+        <strong>10. 页面滚动监控</strong>
+        <p>滚动下方的容器，SDK 会记录滚动深度</p>
+        <div class="scroll-container" id="scroll-container">
+          <div class="scroll-item">滚动区域 - 第 1 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 2 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 3 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 4 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 5 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 6 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 7 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 8 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 9 个元素</div>
+          <div class="scroll-item">滚动区域 - 第 10 个元素</div>
+        </div>
+      </div>
+
+      <div class="test-item">
+        <strong>11. 表单交互</strong>
+        <p>填写并提交表单，SDK 会监控表单行为</p>
+        <form id="demo-form" onsubmit="handleFormSubmit(event)">
+          <div class="form-group">
+            <label for="username">用户名：</label>
+            <input type="text" id="username" name="username" placeholder="请输入用户名">
+          </div>
+          <div class="form-group">
+            <label for="email">邮箱：</label>
+            <input type="email" id="email" name="email" placeholder="请输入邮箱">
+          </div>
+          <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" id="password" name="password" placeholder="请输入密码">
+          </div>
+          <button type="submit" class="btn-primary">提交表单</button>
+          <button type="button" class="btn-danger" onclick="validateForm()">验证表单（不提交）</button>
+        </form>
+      </div>
+
+      <div class="test-item">
+        <strong>12. 页面访问时长</strong>
+        <p>页面已经开启监控，请在此页面停留一段时间</p>
+        <p>SDK 会记录页面访问时长，关闭或切换标签页时自动上报</p>
+      </div>
+    </div>
+
+    <!-- 数据上报测试 -->
+    <div class="section">
+      <h2>📤 数据上报测试</h2>
+
+      <div class="test-item">
+        <strong>13. 手动上报自定义数据</strong>
+        <p>手动调用 SDK 的 report 方法上报自定义监控数据</p>
+        <button class="btn-primary" onclick="manualReportPerformance()">上报性能数据</button>
+        <button class="btn-success" onclick="manualReportBehavior()">上报行为数据</button>
+      </div>
+
+      <div class="info-box">
+        <p><span class="status-indicator"></span>所有数据都会自动上报到服务器</p>
+        <p>打开浏览器的开发者工具 (F12)，切换到 Network 标签页，查看上报的请求。</p>
+        <p>请求地址：<code>http://localhost:8080/reportData</code></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. 触发 JavaScript 错误
+    function triggerJSError() {
+      throw new Error('这是一个测试 JavaScript 错误');
+    }
+
+    // 2. 触发 Promise 错误
+    function triggerPromiseError() {
+      new Promise((resolve, reject) => {
+        reject(new Error('这是一个未处理的 Promise 错误'));
+      });
+      console.log('Promise 已创建但未处理');
+    }
+
+    // 3. 触发控制台错误
+    function triggerConsoleError() {
+      console.error('这是一个控制台错误消息', {
+        type: 'console-error',
+        timestamp: Date.now(),
+        userAgent: navigator.userAgent
+      });
+    }
+
+    // 4. 加载错误资源
+    function loadErrorResources() {
+      const container = document.getElementById('error-resources-container');
+
+      // 创建一个错误图片
+      const img = document.createElement('img');
+      img.src = 'http://non-existent-domain-12345.com/nonexistent.jpg';
+      img.alt = '错误图片';
+      img.style.width = '100px';
+      img.style.marginRight = '10px';
+      container.appendChild(img);
+
+      // 创建一个错误脚本
+      const script = document.createElement('script');
+      script.src = 'http://non-existent-domain-12345.com/nonexistent.js';
+      container.appendChild(script);
+
+      console.log('已添加错误资源加载标签');
+    }
+
+    // 5. 手动上报错误
+    function manualReportError() {
+      monitor.report({
+        type: 'custom',
+        subType: 'manual-error',
+        message: '手动上报的错误信息',
+        timestamp: Date.now(),
+        extra: {
+          userId: 'user-123',
+          action: 'manual-report'
+        }
+      });
+      console.log('已手动上报错误');
+    }
+
+    // 6. 发起 XHR 请求
+    function makeXHRRequests() {
+      const urls = [
+        'https://jsonplaceholder.typicode.com/posts/1',
+        'https://jsonplaceholder.typicode.com/posts/2',
+        'https://jsonplaceholder.typicode.com/comments/1'
+      ];
+
+      urls.forEach(url => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onload = function () {
+          console.log('XHR 请求成功:', url);
+        };
+        xhr.onerror = function () {
+          console.error('XHR 请求失败:', url);
+        };
+        xhr.send();
+      });
+    }
+
+    // 7. 发起 Fetch 请求
+    function makeFetchRequests() {
+      const urls = [
+        'https://jsonplaceholder.typicode.com/users/1',
+        'https://jsonplaceholder.typicode.com/users/2'
+      ];
+
+      urls.forEach(async url => {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          console.log('Fetch 请求成功:', url, data);
+        } catch (error) {
+          console.error('Fetch 请求失败:', url, error);
+        }
+      });
+    }
+
+    // 8. 加载大量图片
+    function loadManyImages() {
+      const container = document.getElementById('image-container');
+      container.innerHTML = '';
+
+      // 使用占位图服务
+      const imageUrls = [
+        'https://picsum.photos/200/200?random=1',
+        'https://picsum.photos/200/200?random=2',
+        'https://picsum.photos/200/200?random=3',
+        'https://picsum.photos/200/200?random=4',
+        'https://picsum.photos/200/200?random=5'
+      ];
+
+      imageUrls.forEach((url, index) => {
+        const imgDiv = document.createElement('div');
+        imgDiv.className = 'image-item';
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = `图片 ${index + 1}`;
+        img.onload = function () {
+          console.log(`图片 ${index + 1} 加载成功`);
+        };
+        img.onerror = function () {
+          console.error(`图片 ${index + 1} 加载失败`);
+        };
+
+        imgDiv.appendChild(img);
+        container.appendChild(imgDiv);
+      });
+
+      console.log('开始加载图片');
+    }
+
+    // 11. 处理表单提交
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      console.log('表单提交:', data);
+      alert('表单已提交！请查看控制台输出。');
+    }
+
+    // 验证表单（不提交）
+    function validateForm() {
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !email || !password) {
+        console.error('表单验证失败：所有字段都是必填的');
+        alert('请填写所有字段！');
+        return false;
+      }
+
+      console.log('表单验证通过:', { username, email, password });
+      alert('表单验证通过！');
+      return true;
+    }
+
+    // 13. 手动上报性能数据
+    function manualReportPerformance() {
+      monitor.report({
+        type: 'performance',
+        subType: 'manual-performance',
+        timestamp: Date.now(),
+        metrics: {
+          fcp: 1000,
+          lcp: 2500,
+          fid: 50,
+          cls: 0.1,
+          fps: 60
+        }
+      });
+      console.log('已手动上报性能数据');
+    }
+
+    // 13. 手动上报行为数据
+    function manualReportBehavior() {
+      monitor.report({
+        type: 'behavior',
+        subType: 'manual-behavior',
+        timestamp: Date.now(),
+        behavior: {
+          action: 'custom-button-click',
+          element: 'manual-report-button',
+          scrollDepth: Math.round(Math.random() * 100)
+        }
+      });
+      console.log('已手动上报行为数据');
+    }
+
+    // FPS 测试循环
+    let fpsTestRunning = false;
+    function startFPSTest() {
+      fpsTestRunning = true;
+      let lastTime = performance.now();
+      let frames = 0;
+
+      function measureFPS() {
+        if (!fpsTestRunning) return;
+
+        const currentTime = performance.now();
+        frames++;
+
+        if (currentTime >= lastTime + 1000) {
+          const fps = Math.round(frames * 1000 / (currentTime - lastTime));
+          console.log('当前 FPS:', fps);
+          frames = 0;
+          lastTime = currentTime;
+        }
+
+        requestAnimationFrame(measureFPS);
+      }
+
+      measureFPS();
+    }
+
+    // 页面加载完成后自动开始 FPS 测试
+    window.addEventListener('load', function () {
+      console.log('页面加载完成，开始 FPS 监控');
+      startFPSTest();
+
+      // 模拟一些用户行为
+      setTimeout(() => {
+        console.log('页面已停留 3 秒');
+      }, 3000);
+    });
+
+    // 页面离开前尝试进行一些操作
+    window.addEventListener('beforeunload', function () {
+      console.log('页面即将关闭');
+    });
+
+    // 监听页面可见性变化
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        console.log('页面进入后台');
+      } else {
+        console.log('页面回到前台');
+      }
+    });
+  </script>
+</body>
+
+</html>
