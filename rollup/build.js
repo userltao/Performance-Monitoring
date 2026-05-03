@@ -1,9 +1,20 @@
 const path = require('path')
+const fs = require('fs')
 const json = require('@rollup/plugin-json')
 const { babel } = require('@rollup/plugin-babel')
 
 const resolveFile = function (filePath) {
     return path.join(__dirname, filePath)
+}
+
+// 复制类型定义文件到 dist 目录
+function copyTypescriptDeclarations() {
+    const src = resolveFile('../types/index.d.ts')
+    const dest = resolveFile('../dist/index.d.ts')
+    if (fs.existsSync(src)) {
+        fs.copyFileSync(src, dest)
+        console.log('✓ TypeScript declarations copied to dist/index.d.ts')
+    }
 }
 
 const plugins = [
@@ -26,6 +37,12 @@ const plugins = [
             },
         ]],
     }),
+    {
+        name: 'copy-types',
+        writeBundle() {
+            copyTypescriptDeclarations()
+        },
+    },
 ]
 
 module.exports = [

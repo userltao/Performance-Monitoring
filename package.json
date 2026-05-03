@@ -5,6 +5,7 @@
   "author": "tanguangzhi",
   "main": "dist/monitor.cjs.js",
   "module": "dist/monitor.esm.js",
+  "types": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/woai3c/monitor-demo.git"
@@ -17,7 +18,8 @@
     "build": "rollup -c rollup/build.js",
     "dev": "node rollup/dev.js",
     "server": "node server.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
@@ -48,6 +50,7 @@
     "jest-environment-jsdom": "^30.3.0",
     "lerna": "^3.22.1",
     "lint-staged": "^11.1.1",
-    "rollup": "^2.55.1"
+    "rollup": "^2.55.1",
+    "typescript": "^5.0.0"
   }
 }

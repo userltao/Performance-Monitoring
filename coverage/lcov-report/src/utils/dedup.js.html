@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/error/index.js</title>
+    <title>Code coverage report for src/utils/dedup.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/error</a> index.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/utils</a> dedup.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">95.65% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/32</span>
+                <span class='fraction'>44/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.09% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>13/22</span>
+                <span class='fraction'>22/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.41% </span>
+                <span class="strong">97.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/31</span>
+                <span class='fraction'>43/44</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -171,221 +171,329 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">83x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">83x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">83x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">147x</span>
+<span class="cline-any cline-yes">146x</span>
+<span class="cline-any cline-yes">146x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">121x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">121x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">121x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">121x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">80x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { lazyReportCache } from '../utils/report'
-import { onBFCacheRestore, getPageURL } from '../utils/utils'
-import { isDuplicate } from '../utils/dedup'
-import config from '../config'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * 错误去重工具模块
+ * 相同错误短时间内只上报一次，避免重复数据
+ */
 &nbsp;
-export default function error() {
-    const oldConsoleError = window.console.error
-    window.console.error = (...args) =&gt; {
-        oldConsoleError.apply(this, args)
+// 存储错误指纹和最后上报时间
+const errorCache = new Map()
 &nbsp;
-        const errorData = {
-            type: 'error',
-            subType: 'console-error',
-            startTime: performance.now(),
-            errData: args,
-            pageURL: getPageURL(),
-        }
+// 默认去重时间窗口（5秒）
+const DEFAULT_INTERVAL = 5000
 &nbsp;
-        // 去重检查：相同控制台错误短时间内只上报一次
-        if (!isDuplicate(errorData)) {
-            lazyReportCache(errorData)
-        }
+// 默认清理间隔（60秒）
+const DEFAULT_CLEANUP_INTERVAL = 60000
+&nbsp;
+/**
+ * 安全地将值转换为字符串并截取
+ * @param {any} value - 要转换的值
+ * @param {number} maxLength - 最大长度
+ * @returns {string} 截取后的字符串
+ */
+function safeSlice(value, maxLength) {
+    if (value == null) return ''
+    const str = typeof value === 'string' ? value : String(value)
+    return str.slice(0, maxLength)
+}
+&nbsp;
+/**
+ * 生成错误指纹
+ * 根据错误类型和关键信息生成唯一标识
+ * @param {Object} errorData - 错误数据
+ * @returns {string} 错误指纹
+ */
+export function generateFingerprint(errorData) {
+    const { subType, msg, url, resourceType, errData, reason, error } = errorData
+&nbsp;
+    // 基础指纹 = 子类型
+    let fingerprint = subType || <span class="branch-1 cbranch-no" title="branch not covered" >'unknown'</span>
+&nbsp;
+    switch (subType) {
+        case 'console-error':
+            // 控制台错误：使用错误信息的前100个字符
+            fingerprint += `:${errData?.map(item =&gt;
+                safeSlice(item, 100)
+            ).join(',')}`
+            break
+&nbsp;
+        case 'js':
+            // JS错误：使用消息 + 文件URL + 行号
+            fingerprint += `:${safeSlice(msg, 100)}:${url}:${errorData.line}:${errorData.column}`
+            break
+&nbsp;
+        case 'promise':
+            // Promise错误：使用错误堆栈的前200个字符
+            fingerprint += `:${safeSlice(reason, 200)}`
+            break
+&nbsp;
+        case 'resource':
+            // 资源错误：使用资源URL + 资源类型
+            fingerprint += `:${url}:${resourceType}`
+            break
+&nbsp;
+        case 'vue':
+            // Vue错误：使用错误堆栈的前200个字符
+            fingerprint += `:${safeSlice(error, 200)}`
+            break
+&nbsp;
+        default:
+            // 其他：使用JSON序列化的前200个字符
+            fingerprint += `:${safeSlice(JSON.stringify(errorData), 200)}`
     }
 &nbsp;
-    // 捕获资源加载失败错误 js css img...
-    window.addEventListener('error', e =&gt; {
-        const target = e.target
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!target) <span class="cstat-no" title="statement not covered" >return</span>
+    return fingerprint
+}
 &nbsp;
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (target.src || <span class="branch-1 cbranch-no" title="branch not covered" >target.href)</span> {
-            const url = target.src || <span class="branch-1 cbranch-no" title="branch not covered" >target.href</span>
-            const errorData = {
-                url,
-                type: 'error',
-                subType: 'resource',
-                startTime: e.timeStamp,
-                html: target.outerHTML,
-                resourceType: target.tagName,
-                paths: e.path ? <span class="branch-0 cbranch-no" title="branch not covered" >e.path.map(<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.tagName)</span>.filter(Boolean) </span>: [],
-                pageURL: getPageURL(),
-            }
+/**
+ * 检查是否为重复错误
+ * @param {Object} errorData - 错误数据
+ * @param {number} interval - 去重时间窗口（毫秒），默认 5000ms
+ * @returns {boolean} 是否为重复错误
+ */
+export function isDuplicate(errorData, interval = DEFAULT_INTERVAL) {
+    const fingerprint = generateFingerprint(errorData)
+    const now = Date.now()
+    const lastReportTime = errorCache.get(fingerprint)
 &nbsp;
-            // 去重检查：相同资源错误短时间内只上报一次
-            if (!isDuplicate(errorData)) {
-                lazyReportCache(errorData)
-            }
-        }
-    }, true)
-&nbsp;
-    // 监听 js 错误
-    window.onerror = (msg, url, line, column, error) =&gt; {
-        const errorData = {
-            msg,
-            line,
-            column,
-            error: error?.stack,
-            subType: 'js',
-            pageURL: url,
-            type: 'error',
-            startTime: performance.now(),
-        }
-&nbsp;
-        // 去重检查：相同JS错误短时间内只上报一次
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!isDuplicate(errorData)) {
-            lazyReportCache(errorData)
-        }
+    // 如果是首次上报，或者已超过去重时间窗口
+    if (!lastReportTime || now - lastReportTime &gt; interval) {
+        errorCache.set(fingerprint, now)
+        return false
     }
 &nbsp;
-    // 监听 promise 错误 缺点是获取不到列数据
-    window.addEventListener('unhandledrejection', e =&gt; {
-        const errorData = {
-            reason: e.reason?.stack,
-            subType: 'promise',
-            type: 'error',
-            startTime: e.timeStamp,
-            pageURL: getPageURL(),
-        }
+    return true
+}
 &nbsp;
-        // 去重检查：相同Promise错误短时间内只上报一次
-        if (!isDuplicate(errorData)) {
-            lazyReportCache(errorData)
-        }
-    })
+/**
+ * 清除错误缓存
+ * 用于测试或手动重置
+ */
+export function clearDedupCache() {
+    errorCache.clear()
+}
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (config.vue?.Vue) {
-<span class="cstat-no" title="statement not covered" >        config.vue.Vue.config.errorHandler = <span class="fstat-no" title="function not covered" >(e</span>rr, vm, info) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            console.error(err)</span>
+/**
+ * 获取缓存大小
+ * @returns {number} 缓存条目数
+ */
+export function getDedupCacheSize() {
+    return errorCache.size
+}
 &nbsp;
-            const errorData = <span class="cstat-no" title="statement not covered" >{</span>
-                info,
-                error: err.stack,
-                subType: 'vue',
-                type: 'error',
-                startTime: performance.now(),
-                pageURL: getPageURL(),
+/**
+ * 定期清理过期的缓存条目
+ * 防止内存泄漏
+ * @param {number} maxAge - 条目最大存活时间（毫秒），默认 60000ms
+ * @param {number} cleanupInterval - 清理检查间隔（毫秒），默认等于 maxAge
+ */
+let cleanupTimer = null
+export function startCleanup(maxAge = <span class="branch-0 cbranch-no" title="branch not covered" >DEFAULT_CLEANUP_INTERVAL,</span> cleanupInterval) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (cleanupTimer) <span class="cstat-no" title="statement not covered" >return</span>
+&nbsp;
+    // 如果没有指定清理间隔，使用 maxAge 作为清理间隔
+    const interval = cleanupInterval || <span class="branch-1 cbranch-no" title="branch not covered" >maxAge</span>
+&nbsp;
+    cleanupTimer = setInterval(() =&gt; {
+        const now = Date.now()
+        for (const [fingerprint, time] of errorCache.entries()) {
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (now - time &gt; maxAge) {
+                errorCache.delete(fingerprint)
             }
-&nbsp;
-            // 去重检查：相同Vue错误短时间内只上报一次
-<span class="cstat-no" title="statement not covered" >            if (!isDuplicate(errorData)) {</span>
-<span class="cstat-no" title="statement not covered" >                lazyReportCache(errorData)</span>
-            }
         }
+    }, interval)
+&nbsp;
+    // 防止定时器阻止进程退出
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (cleanupTimer.unref) {
+<span class="cstat-no" title="statement not covered" >        cleanupTimer.unref()</span>
     }
+}
 &nbsp;
-    onBFCacheRestore(<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >        error()</span>
-    })
+export function stopCleanup() {
+    if (cleanupTimer) {
+        clearInterval(cleanupTimer)
+        cleanupTimer = null
+    }
 }
 &nbsp;</pre></td></tr></table></pre>
 

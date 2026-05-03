@@ -10,7 +10,8 @@ describe('behavior/utils', () => {
         jest.mock('../../utils/generateUniqueID', () => jest.fn(() => 'mock-uuid-123'))
 
         // 使用 spyOn 来 mock localStorage 方法
-        jest.spyOn(Storage.prototype, 'getItem')
+        // 确保 getItem 返回 null（模拟空 localStorage）
+        jest.spyOn(Storage.prototype, 'getItem').mockReturnValue(null)
         jest.spyOn(Storage.prototype, 'setItem')
         jest.spyOn(Storage.prototype, 'removeItem')
         jest.spyOn(Storage.prototype, 'clear')
