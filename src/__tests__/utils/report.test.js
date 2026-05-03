@@ -66,12 +66,17 @@ describe('lazyReportCache', () => {
 
         expect(navigator.sendBeacon).not.toHaveBeenCalled()
 
+        // 推进 setTimeout 以触发 lazyReportCache 的定时器
         jest.advanceTimersByTime(3000)
+        // 推进 requestIdleCallback 以触发 report 函数中的上报
+        jest.advanceTimersByTime(1000)
+
         expect(navigator.sendBeacon).toHaveBeenCalledTimes(1)
     })
 
     it('should not report when cache is empty', () => {
         jest.advanceTimersByTime(3000)
+        jest.advanceTimersByTime(1000)
         expect(navigator.sendBeacon).not.toHaveBeenCalled()
     })
 })

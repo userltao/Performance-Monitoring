@@ -26,7 +26,7 @@
     }
   },
   "lint-staged": {
-    "packages/*/{src,types}/**/*.js": [
+    "src/**/*.js": [
       "eslint --ext .js"
     ]
   },
