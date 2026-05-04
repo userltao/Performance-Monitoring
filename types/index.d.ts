@@ -35,6 +35,47 @@ export interface VueConfig {
 }
 
 /**
+ * 脱敏选项
+ */
+export interface SanitizeOptions {
+    /** 是否脱敏手机号 (默认 true) */
+    phone?: boolean;
+    /** 是否脱敏身份证号 (默认 true) */
+    idCard?: boolean;
+    /** 是否脱敏邮箱 (默认 true) */
+    email?: boolean;
+    /** 是否脱敏银行卡号 (默认 true) */
+    bankCard?: boolean;
+    /** 是否脱敏 IP 地址 (默认 true) */
+    ip?: boolean;
+    /** 是否脱敏中文姓名 (默认 false，误伤率高) */
+    name?: boolean;
+    /** 是否脱敏 URL 中的敏感参数 (默认 true) */
+    urlToken?: boolean;
+    /** 自定义正则表达式数组 */
+    customPatterns?: RegExp[];
+    /** 自定义替换函数 */
+    customReplacer?: (match: string) => string;
+}
+
+/**
+ * 脱敏级别
+ */
+export type SanitizeLevel = 'STRICT' | 'STANDARD' | 'LOOSE' | 'OFF';
+
+/**
+ * 脱敏配置
+ */
+export interface SanitizeConfig {
+    /** 是否启用脱敏 (默认 true) */
+    enabled?: boolean;
+    /** 脱敏级别 (默认 'STANDARD') */
+    level?: SanitizeLevel;
+    /** 自定义脱敏选项 (优先级高于 level) */
+    options?: SanitizeOptions | null;
+}
+
+/**
  * 监控配置选项
  */
 export interface MonitorOptions {
@@ -46,6 +87,8 @@ export interface MonitorOptions {
     userID?: string;
     /** Vue 相关配置 */
     vue?: VueConfig;
+    /** 数据脱敏配置 */
+    sanitize?: SanitizeConfig;
 }
 
 // ==================== 数据上报类型 ====================
@@ -316,6 +359,36 @@ export interface VueRouterPerformanceData extends BaseReportData {
 }
 
 /**
+ * 性能评分数据
+ */
+export interface PerformanceScoreData extends BaseReportData {
+    type: 'performance';
+    subType: 'performance-score';
+    /** 综合分数 (0-100) */
+    totalScore: number;
+    /** 评级: 'good' | 'needs-improvement' | 'poor' */
+    rating: 'good' | 'needs-improvement' | 'poor';
+    /** 各指标分数 */
+    scores: {
+        LCP?: number;
+        FID?: number;
+        CLS?: number;
+    };
+    /** 各指标原始值 */
+    metrics: {
+        LCP?: number | null;
+        FID?: number | null;
+        CLS?: number | null;
+    };
+    /** 指标权重 */
+    weights: {
+        LCP: number;
+        FID: number;
+        CLS: number;
+    };
+}
+
+/**
  * 性能数据联合类型
  */
 export type PerformanceData =
@@ -328,7 +401,8 @@ export type PerformanceData =
     | ResourceData
     | RequestData
     | FPSData
-    | VueRouterPerformanceData;
+    | VueRouterPerformanceData
+    | PerformanceScoreData;
 
 // ==================== 行为监控类型 ====================
 
@@ -601,3 +675,91 @@ export function startCleanup(interval?: number): void;
  * 停止定期清理
  */
 export function stopCleanup(): void;
+
+// ==================== 性能评分类型 ====================
+
+/**
+ * 评分阈值配置
+ */
+export interface ScoreThresholds {
+    good: number;
+    poor: number;
+}
+
+/**
+ * 计算单个指标的分数 (0-100)
+ * @param value - 指标值
+ * @param threshold - 阈值配置 { good, poor }
+ * @returns 分数 (0-100)
+ */
+export function calculateMetricScore(value: number, threshold: ScoreThresholds): number;
+
+/**
+ * 计算综合性能分数
+ * @returns 评分结果，如果没有数据返回 null
+ */
+export function calculatePerformanceScore(): PerformanceScoreData | null;
+
+/**
+ * 根据分数获取评级
+ * @param score - 综合分数 (0-100)
+ * @returns 评级: 'good' | 'needs-improvement' | 'poor'
+ */
+export function getRating(score: number): 'good' | 'needs-improvement' | 'poor';
+
+/**
+ * 更新指标值
+ * @param metricName - 指标名称 (LCP/FID/CLS)
+ * @param value - 指标值
+ */
+export function updateMetric(metricName: 'LCP' | 'FID' | 'CLS', value: number): void;
+
+/**
+ * 获取当前存储的指标值
+ * @returns 指标值
+ */
+export function getMetrics(): { LCP: number | null; FID: number | null; CLS: number | null };
+
+/**
+ * 重置所有指标 (用于测试或页面重新加载)
+ */
+export function resetMetrics(): void;
+
+// ==================== 数据脱敏类型 ====================
+
+/**
+ * 脱敏级别预设
+ */
+export const SANITIZE_LEVELS: {
+    /** 严格模式: 脱敏所有敏感信息 */
+    STRICT: Required<SanitizeOptions>;
+    /** 标准模式: 脱敏常见敏感信息，不脱敏姓名 (误伤率高) */
+    STANDARD: Required<SanitizeOptions>;
+    /** 宽松模式: 只脱敏最关键的敏感信息 */
+    LOOSE: Required<SanitizeOptions>;
+    /** 关闭模式: 不进行脱敏 */
+    OFF: Required<SanitizeOptions>;
+};
+
+/**
+ * 对字符串进行脱敏处理
+ * @param text - 待脱敏的字符串
+ * @param options - 脱敏选项
+ * @returns 脱敏后的字符串
+ */
+export function sanitizeString(text: string, options?: SanitizeOptions): string;
+
+/**
+ * 递归遍历对象，对所有字符串值进行脱敏
+ * @param data - 待脱敏的数据
+ * @param options - 脱敏选项
+ * @returns 脱敏后的数据
+ */
+export function sanitizeData<T = any>(data: T, options?: SanitizeOptions): T;
+
+/**
+ * 创建脱敏处理器
+ * @param options - 脱敏选项
+ * @returns 脱敏处理函数
+ */
+export function createSanitizer(options?: SanitizeOptions): (data: any) => any;

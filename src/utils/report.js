@@ -2,6 +2,7 @@ import { originalOpen, originalSend } from './xhr'
 import { addCache, getCache, clearCache } from './cache'
 import generateUniqueID from '../utils/generateUniqueID'
 import config from '../config'
+import { sanitizeData, SANITIZE_LEVELS } from './sanitize'
 
 export function isSupportSendBeacon() {
     return !!window.navigator?.sendBeacon
@@ -15,11 +16,20 @@ export function report(data, isImmediate = false) {
         console.error('请设置上传 url 地址')
     }
 
+    // 应用数据脱敏
+    let sanitizedData = data
+    if (config.sanitize?.enabled !== false) {
+        const sanitizeOptions = config.sanitize?.options || SANITIZE_LEVELS[config.sanitize?.level || 'STANDARD']
+        if (sanitizeOptions) {
+            sanitizedData = sanitizeData(data, sanitizeOptions)
+        }
+    }
+
     const reportData = JSON.stringify({
         id: sessionID,
         appID: config.appID,
         userID: config.userID,
-        data,
+        data: sanitizedData,
     })
 
     // 要立即上报，直接发送

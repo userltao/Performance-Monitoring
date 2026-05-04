@@ -6,6 +6,11 @@ const config = {
         Vue: null,
         router: null,
     },
+    sanitize: {
+        enabled: true,
+        level: 'STANDARD',
+        options: null,
+    },
 }
 
 export default config
