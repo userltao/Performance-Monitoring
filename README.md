@@ -1,8 +1,7 @@
 # monitor
-一个简易的前端监控 SDK DEMO，仅供学习，请勿在生产环境中使用。
+一个简易的前端监控 SDK
 
-## 文档
-* [前端监控 SDK 的一些技术要点原理分析](https://github.com/woai3c/Front-end-articles/issues/26)
+
 
 ## DEMO
 克隆项目后，执行命令打开服务器。
