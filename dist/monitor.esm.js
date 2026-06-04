@@ -1825,15 +1825,63 @@ function pv() {
   });
 }
 
+var startTime$1 = 0; // 页面激活时的起始时间戳
+var activeDuration = 0; // 累计活跃时长（ms）
+var isActive = true; // 当前页面是否处于前台激活状态
+
 function pageAccessDuration() {
+  // 页面加载完成后开始计时
+  startTime$1 = performance.now();
+  activeDuration = 0;
+  isActive = true;
+
+  // 监听 visibilitychange：页面切到后台时暂停计时，回到前台时恢复
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      // 页面进入后台：累加当前这段活跃时长
+      if (isActive) {
+        activeDuration += performance.now() - startTime$1;
+        isActive = false;
+      }
+    } else {
+      // 页面回到前台：重新开始计时
+      startTime$1 = performance.now();
+      isActive = true;
+    }
+  }, true);
+
+  // 页面离开时上报最终的活跃停留时长
   onBeforeunload(function () {
+    if (isActive) {
+      activeDuration += performance.now() - startTime$1;
+      isActive = false;
+    }
     report({
       type: 'behavior',
       subType: 'page-access-duration',
-      startTime: performance.now(),
+      duration: Math.round(activeDuration),
       pageURL: getPageURL(),
       uuid: getUUID()
     }, true);
+  });
+
+  // 页面隐藏时（切换标签页 / 最小化）也上报一次当前累计活跃时长
+  onHidden(function () {
+    if (isActive) {
+      activeDuration += performance.now() - startTime$1;
+      isActive = false;
+    }
+
+    // 仅当有有效停留时长时才上报
+    if (activeDuration > 0) {
+      lazyReportCache({
+        type: 'behavior',
+        subType: 'page-access-duration',
+        duration: Math.round(activeDuration),
+        pageURL: getPageURL(),
+        uuid: getUUID()
+      });
+    }
   });
 }
 
@@ -1844,19 +1892,26 @@ var pageHeight = 0; // 页面总高度
 var scrollTop = 0; // 滚动了多少
 var viewportHeight = 0; // 屏幕可视高度
 
+// 记录页面级别的最大滚动深度
+var maxScrollDepth = 0;
 function pageAccessHeight() {
-  window.addEventListener('scroll', onScroll);
+  // 使用捕获阶段监听 scroll 事件，这样既能捕获 window 的滚动，
+  // 也能捕获子元素（如 div 滚动容器）的滚动事件
+  window.addEventListener('scroll', onScroll, true);
 
   // 页面离开时：上报最终阅读高度
   onBeforeunload(function () {
     var now = performance.now();
+    updateScrollMetrics();
     report({
       startTime: now,
       duration: now - startTime,
       type: 'behavior',
       subType: 'page-access-height',
       pageURL: getPageURL(),
-      value: toPercent((scrollTop + viewportHeight) / pageHeight),
+      scrollDepth: Math.round(Math.min(maxScrollDepth, 1) * 100),
+      maxScrollDepth: Math.round(Math.min(maxScrollDepth, 1) * 100),
+      value: toPercent(maxScrollDepth),
       uuid: getUUID()
     }, true);
   });
@@ -1864,14 +1919,24 @@ function pageAccessHeight() {
   // 页面加载完成后初始化记录当前访问高度、时间
   executeAfterLoad(function () {
     startTime = performance.now();
-    pageHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-    scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    viewportHeight = window.innerHeight;
+    updateScrollMetrics();
+    maxScrollDepth = (scrollTop + viewportHeight) / pageHeight;
   });
 }
-function onScroll() {
+function onScroll(e) {
   clearTimeout(timer);
   var now = performance.now();
+
+  // 更新滚动指标
+  updateScrollMetrics();
+
+  // 计算当前滚动深度比例
+  var currentDepth = pageHeight > 0 ? (scrollTop + viewportHeight) / pageHeight : 0;
+
+  // 更新最大滚动深度
+  if (currentDepth > maxScrollDepth) {
+    maxScrollDepth = currentDepth;
+  }
   if (!hasReport) {
     hasReport = true;
     lazyReportCache({
@@ -1880,17 +1945,22 @@ function onScroll() {
       type: 'behavior',
       subType: 'page-access-height',
       pageURL: getPageURL(),
-      value: toPercent((scrollTop + viewportHeight) / pageHeight),
+      scrollDepth: Math.round(Math.min(currentDepth, 1) * 100),
+      maxScrollDepth: Math.round(Math.min(maxScrollDepth, 1) * 100),
+      value: toPercent(currentDepth),
       uuid: getUUID()
     });
   }
   timer = setTimeout(function () {
     hasReport = false;
     startTime = now;
-    pageHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-    scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    viewportHeight = window.innerHeight;
+    updateScrollMetrics();
   }, 500);
+}
+function updateScrollMetrics() {
+  pageHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+  scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  viewportHeight = window.innerHeight;
 }
 function toPercent(val) {
   if (val >= 1) return '100%';

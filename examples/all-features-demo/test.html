@@ -333,7 +333,8 @@
 
       <div class="test-item">
         <strong>10. 页面滚动监控</strong>
-        <p>滚动下方的容器，SDK 会记录滚动深度</p>
+        <p>滚动下方的容器或整个页面，SDK 会记录滚动深度</p>
+        <p>当前页面最大滚动深度：<strong id="scroll-depth">0%</strong></p>
         <div class="scroll-container" id="scroll-container">
           <div class="scroll-item">滚动区域 - 第 1 个元素</div>
           <div class="scroll-item">滚动区域 - 第 2 个元素</div>
@@ -370,9 +371,10 @@
       </div>
 
       <div class="test-item">
-        <strong>12. 页面访问时长</strong>
-        <p>页面已经开启监控，请在此页面停留一段时间</p>
-        <p>SDK 会记录页面访问时长，关闭或切换标签页时自动上报</p>
+        <strong>12. 页面访问时长（活跃停留）</strong>
+        <p>SDK 会记录<strong>活跃停留时长</strong>——切换标签页/最小化时自动暂停计时</p>
+        <p>当前活跃停留：<strong id="dwell-time">0</strong> 秒 &nbsp;|&nbsp; 页面状态：<span id="page-state" style="color:#48bb8a">前台</span></p>
+        <p style="color:#888;font-size:14px">尝试切换到其他标签页再切回来，计时器会自动暂停/恢复</p>
       </div>
     </div>
 
@@ -616,6 +618,42 @@
     window.addEventListener('load', function () {
       console.log('页面加载完成，开始 FPS 监控');
       startFPSTest();
+
+      // === 活跃停留时长实时显示 ===
+      let dwellActiveStart = performance.now();
+      let dwellAccumulated = 0;
+      const dwellEl = document.getElementById('dwell-time');
+      const stateEl = document.getElementById('page-state');
+
+      setInterval(() => {
+        const total = dwellAccumulated + (performance.now() - dwellActiveStart);
+        dwellEl.textContent = (total / 1000).toFixed(1);
+      }, 100);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          dwellAccumulated += performance.now() - dwellActiveStart;
+          stateEl.textContent = '后台';
+          stateEl.style.color = '#f56565';
+        } else {
+          dwellActiveStart = performance.now();
+          stateEl.textContent = '前台';
+          stateEl.style.color = '#48bb8a';
+        }
+      }, true);
+
+      // === 滚动深度实时显示 ===
+      const depthEl = document.getElementById('scroll-depth');
+      let maxDepth = 0;
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const pageHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+        const viewportHeight = window.innerHeight;
+        const depth = pageHeight > 0 ? (scrollTop + viewportHeight) / pageHeight : 0;
+        if (depth > maxDepth) maxDepth = depth;
+        depthEl.textContent = (Math.min(maxDepth, 1) * 100).toFixed(1) + '%';
+      }, true);
 
       // 模拟一些用户行为
       setTimeout(() => {

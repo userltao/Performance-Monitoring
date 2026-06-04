@@ -18,6 +18,7 @@
     "build": "rollup -c rollup/build.js",
     "dev": "node rollup/dev.js",
     "server": "node server.js",
+    "server:ai": "node -r dotenv/config server.js",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit"
   },
@@ -31,6 +32,11 @@
     "src/**/*.js": [
       "eslint --ext .js"
     ]
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "marked": "^12.0.0",
+    "openai": "^4.50.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.8",
