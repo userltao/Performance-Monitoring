@@ -4,174 +4,361 @@
 <meta charset="UTF-8">
 <title>Monitor Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css">
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; color: #333; display: flex; overflow: hidden; }
-/* ─── 左侧 AI 面板 ─── */
+
+:root {
+    --header-h: 64px;
+    --bg-page: #f1f5f9;
+    --bg-card: #ffffff;
+    --accent: #d97706;
+    --accent-light: #fef3c7;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --error: #dc2626;
+    --error-bg: #fef2f2;
+    --success: #059669;
+    --success-bg: #ecfdf5;
+    --info: #6366f1;
+    --info-bg: #eef2ff;
+    --radius: 12px;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg-page); color: var(--text-primary);
+    display: flex; overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+
+/* ═══════════════════════════════════════════
+   左侧 AI 面板
+   ═══════════════════════════════════════════ */
 .ai-panel {
-    width: 33.333%; height: 100vh;
-    background: #fff; display: flex; flex-direction: column;
-    border-right: 1px solid #e5e7eb; flex-shrink: 0;
+    width: 34%; min-width: 320px; height: 100vh;
+    background: var(--bg-card); display: flex; flex-direction: column;
+    border-right: 1px solid var(--border); flex-shrink: 0;
 }
+
 .ai-header {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
-    color: #fff; padding: 18px 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-shrink: 0;
+    background: var(--text-primary); color: #fff;
+    padding: 0 22px; height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0; position: relative; overflow: hidden;
 }
-.ai-header-left { display: flex; align-items: center; gap: 12px; }
+.ai-header::after {
+    content: ''; position: absolute; right: -40px; top: -40px;
+    width: 160px; height: 160px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(217,119,6,0.15) 0%, transparent 70%);
+}
+.ai-header-left { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
 .ai-header-left .ai-icon {
-    width: 36px; height: 36px; background: rgba(255,255,255,0.2);
+    width: 36px; height: 36px; background: rgba(255,255,255,0.08);
     border-radius: 10px; display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
+    font-size: 18px; border: 1px solid rgba(255,255,255,0.06);
 }
-.ai-header-left .ai-title { font-weight: 700; font-size: 16px; letter-spacing: 0.3px; }
-.ai-header-left .ai-subtitle { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+.ai-header-left .ai-title { font-weight: 600; font-size: 14px; letter-spacing: 0.3px; }
+.ai-header-left .ai-subtitle { font-size: 11px; opacity: 0.5; margin-top: 2px; font-weight: 400; }
+
 .ai-toolbar {
-    display: flex; gap: 6px; padding: 12px 16px; background: #f8f9fc;
-    border-bottom: 1px solid #eee; flex-shrink: 0;
+    display: flex; gap: 6px; padding: 10px 16px;
+    background: #fafbfc; border-bottom: 1px solid var(--border); flex-shrink: 0;
 }
 .ai-toolbar button {
-    flex: 1; padding: 8px 0; border: 1px solid #e0e0e0; border-radius: 8px;
-    background: #fff; cursor: pointer; font-size: 12px; color: #555;
+    flex: 1; padding: 7px 0; border: 1px solid var(--border); border-radius: 8px;
+    background: #fff; cursor: pointer; font-size: 12px; color: var(--text-secondary);
     display: flex; align-items: center; justify-content: center; gap: 4px;
-    transition: all 0.2s;
+    transition: all 0.2s; font-weight: 500;
 }
-.ai-toolbar button:hover { border-color: #4f46e5; color: #4f46e5; background: #f0f0ff; }
+.ai-toolbar button:hover {
+    border-color: var(--accent); color: var(--accent); background: var(--accent-light);
+}
+
 .ai-messages {
-    flex: 1; overflow-y: auto; padding: 16px; background: #fafbfe;
+    flex: 1; overflow-y: auto; padding: 18px 16px;
+    background: #fafbfc;
     display: flex; flex-direction: column; gap: 12px;
 }
-.ai-messages::-webkit-scrollbar { width: 6px; }
-.ai-messages::-webkit-scrollbar-track { background: transparent; }
-.ai-messages::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
 .ai-msg {
-    padding: 10px 14px; border-radius: 12px; font-size: 13.5px;
-    line-height: 1.7; white-space: pre-wrap; word-break: break-word;
-    max-width: 88%; animation: msgIn 0.2s ease;
+    padding: 10px 14px; border-radius: 14px; font-size: 13.5px;
+    line-height: 1.5; word-break: break-word;
+    max-width: 88%; animation: msgIn 0.25s cubic-bezier(0.4,0,0.2,1);
 }
-@keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 .ai-msg-user {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff;
+    background: var(--text-primary); color: #fff;
     align-self: flex-end; border-bottom-right-radius: 4px;
 }
 .ai-msg-ai {
-    background: #fff; color: #333; align-self: flex-start;
-    border: 1px solid #e8e8ee; border-bottom-left-radius: 4px;
+    background: #fff; color: var(--text-primary); align-self: flex-start;
+    border: 1px solid var(--border); border-bottom-left-radius: 4px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     padding: 14px 16px;
 }
+
 /* ─── Markdown 渲染样式 ─── */
 .ai-msg-ai h1, .ai-msg-ai h2, .ai-msg-ai h3, .ai-msg-ai h4 {
-    margin: 12px 0 6px; font-weight: 700; line-height: 1.4;
+    margin: 10px 0 5px; font-weight: 700; line-height: 1.4;
 }
-.ai-msg-ai h1 { font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 6px; }
-.ai-msg-ai h2 { font-size: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px; }
-.ai-msg-ai h3 { font-size: 14px; }
+.ai-msg-ai h1 { font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+.ai-msg-ai h2 { font-size: 14px; }
+.ai-msg-ai h3 { font-size: 13.5px; }
 .ai-msg-ai h4 { font-size: 13px; }
-.ai-msg-ai p { margin: 6px 0; }
-.ai-msg-ai ul, .ai-msg-ai ol { margin: 6px 0; padding-left: 20px; }
-.ai-msg-ai li { margin: 3px 0; }
-.ai-msg-ai strong { font-weight: 700; color: #1a1a2e; }
+.ai-msg-ai p { margin: 5px 0; }
+.ai-msg-ai ul, .ai-msg-ai ol { margin: 5px 0; padding-left: 18px; }
+.ai-msg-ai li { margin: 2px 0; }
+.ai-msg-ai strong { font-weight: 700; color: var(--text-primary); }
 .ai-msg-ai em { font-style: italic; }
 .ai-msg-ai code {
-    background: #f1f3f5; color: #c7254e; padding: 1px 5px; border-radius: 4px;
-    font-family: "SFMono-Regular", Consolas, monospace; font-size: 12.5px;
+    background: #f1f5f9; color: #be185d; padding: 1px 5px; border-radius: 4px;
+    font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px;
 }
 .ai-msg-ai pre {
-    background: #1e1e2e; color: #cdd6f4; padding: 12px 14px; border-radius: 8px;
-    overflow-x: auto; margin: 8px 0; font-size: 12.5px; line-height: 1.5;
+    background: #1e293b; color: #e2e8f0; padding: 14px 16px; border-radius: 10px;
+    overflow-x: auto; margin: 8px 0; font-size: 12px; line-height: 1.55;
 }
-.ai-msg-ai pre code {
-    background: none; color: inherit; padding: 0; font-size: inherit;
-}
+.ai-msg-ai pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+.ai-msg-ai pre code .hljs-keyword { color: #c084fc; }
+.ai-msg-ai pre code .hljs-string { color: #86efac; }
+.ai-msg-ai pre code .hljs-number { color: #fdba74; }
+.ai-msg-ai pre code .hljs-function { color: #7dd3fc; }
+.ai-msg-ai pre code .hljs-comment { color: #64748b; font-style: italic; }
+.ai-msg-ai pre code .hljs-variable { color: #fca5a5; }
+.ai-msg-ai pre code .hljs-attr { color: #fdba74; }
+.ai-msg-ai pre code .hljs-built_in { color: #fde68a; }
+.ai-msg-ai pre code .hljs-title { color: #7dd3fc; }
+.ai-msg-ai pre code .hljs-params { color: #cbd5e1; }
+.ai-msg-ai pre code .hljs-literal { color: #67e8f9; }
 .ai-msg-ai blockquote {
-    border-left: 3px solid #4f46e5; margin: 8px 0; padding: 4px 12px;
-    background: #f8f7ff; color: #555; border-radius: 0 6px 6px 0;
+    border-left: 3px solid var(--accent); margin: 8px 0; padding: 5px 12px;
+    background: var(--accent-light); color: #78350f; border-radius: 0 8px 8px 0;
 }
-.ai-msg-ai table {
-    width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 12.5px;
-}
-.ai-msg-ai thead { background: #f8f9fc; }
+.ai-msg-ai table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 12px; }
+.ai-msg-ai thead { background: #f8fafc; }
 .ai-msg-ai th {
-    border: 1px solid #e0e0e0; padding: 7px 10px; text-align: left;
-    font-weight: 600; color: #444;
+    border: 1px solid var(--border); padding: 7px 10px; text-align: left;
+    font-weight: 600; color: var(--text-secondary);
 }
-.ai-msg-ai td {
-    border: 1px solid #e8e8e8; padding: 6px 10px;
-}
-.ai-msg-ai tbody tr:hover { background: #f8f9fc; }
-.ai-msg-ai hr { border: none; border-top: 1px solid #eee; margin: 10px 0; }
-.ai-msg-ai a { color: #4f46e5; text-decoration: none; }
+.ai-msg-ai td { border: 1px solid #f1f5f9; padding: 6px 10px; }
+.ai-msg-ai tbody tr:hover { background: #f8fafc; }
+.ai-msg-ai hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+.ai-msg-ai a { color: var(--accent); text-decoration: none; }
 .ai-msg-ai a:hover { text-decoration: underline; }
+
 .ai-msg-system {
-    background: #fffbeb; color: #92400e; font-size: 12px;
-    align-self: center; text-align: center; padding: 6px 14px;
+    background: var(--accent-light); color: #92400e; font-size: 12px;
+    align-self: center; text-align: center; padding: 5px 14px;
     border: 1px solid #fde68a; border-radius: 20px;
 }
 .ai-msg-error {
-    background: #fef2f2; color: #991b1b; font-size: 12px;
-    align-self: center; border: 1px solid #fecaca; border-radius: 8px;
+    background: var(--error-bg); color: #991b1b; font-size: 12px;
+    align-self: center; border: 1px solid #fecaca; border-radius: 10px;
 }
+
 .ai-input-area {
-    padding: 12px 16px 16px; border-top: 1px solid #eee;
+    padding: 12px 16px 16px; border-top: 1px solid var(--border);
     background: #fff; flex-shrink: 0;
 }
 .ai-input-row { display: flex; gap: 8px; }
 .ai-input-row input {
-    flex: 1; border: 1.5px solid #e0e0e0; border-radius: 10px;
-    padding: 11px 14px; font-size: 13.5px; outline: none;
-    transition: border-color 0.2s;
+    flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; font-size: 13.5px; outline: none;
+    transition: all 0.2s; font-family: inherit;
 }
-.ai-input-row input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-.ai-input-row input::placeholder { color: #aaa; }
+.ai-input-row input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(217,119,6,0.1);
+}
+.ai-input-row input::placeholder { color: var(--text-muted); }
 .ai-btn-send {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff;
-    border: none; border-radius: 10px; padding: 11px 22px;
+    background: var(--text-primary); color: #fff;
+    border: none; border-radius: 10px; padding: 10px 22px;
     cursor: pointer; font-size: 13.5px; font-weight: 600;
-    transition: opacity 0.2s;
+    transition: all 0.2s; font-family: inherit;
 }
-.ai-btn-send:hover { opacity: 0.9; }
-/* ─── 右侧 Dashboard ─── */
-.main-content { flex: 1; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
-.header { background: #1a1a2e; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-.header h1 { font-size: 18px; }
-.header .actions { display: flex; gap: 8px; }
-.header button { padding: 6px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
-.btn-refresh { background: #1890ff; color: #fff; }
-.btn-clear { background: #ff4d4f; color: #fff; }
-.btn-refresh:hover { background: #40a9ff; }
-.btn-clear:hover { background: #ff7875; }
-.stats { display: flex; gap: 16px; padding: 16px 24px; }
-.stat-card { flex: 1; background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.stat-card .label { font-size: 13px; color: #999; margin-bottom: 4px; }
-.stat-card .value { font-size: 28px; font-weight: 600; }
-.stat-card.error .value { color: #ff4d4f; }
-.stat-card.perf .value { color: #52c41a; }
-.stat-card.behavior .value { color: #1890ff; }
-.stat-card.total .value { color: #722ed1; }
-.filters { padding: 0 24px 12px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.filters select, .filters input { padding: 6px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; }
-.filters input { width: 260px; }
-.table-wrap { padding: 0 24px 24px; flex: 1; }
-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-th { background: #fafafa; text-align: left; padding: 10px 12px; font-size: 13px; color: #666; border-bottom: 1px solid #f0f0f0; position: sticky; top: 0; }
-td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; vertical-align: top; }
-tr:hover { background: #f5f5f5; }
-.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; color: #fff; }
-.tag-error { background: #ff4d4f; }
-.tag-perf { background: #52c41a; }
-.tag-behavior { background: #1890ff; }
-.detail-btn { color: #1890ff; cursor: pointer; border: none; background: none; font-size: 13px; }
-.detail-btn:hover { text-decoration: underline; }
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; justify-content: center; align-items: center; }
+.ai-btn-send:hover { background: #1e293b; }
+
+/* ═══════════════════════════════════════════
+   右侧 Dashboard
+   ═══════════════════════════════════════════ */
+.main-content {
+    flex: 1; height: 100vh; overflow-y: auto;
+    display: flex; flex-direction: column;
+    background: var(--bg-page);
+}
+
+/* ─── Header ─── */
+.header {
+    background: var(--text-primary); color: #fff;
+    padding: 0 28px; height: var(--header-h);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0; position: relative; overflow: hidden;
+}
+.header::after {
+    content: ''; position: absolute; left: 50%; top: -80px;
+    width: 400px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+.header h1 {
+    font-size: 16px; font-weight: 600; letter-spacing: 0.3px;
+    position: relative; z-index: 1;
+}
+.header h1 span {
+    font-weight: 400; opacity: 0.4; font-size: 11px; margin-left: 10px;
+    letter-spacing: 0;
+}
+.header .actions { display: flex; gap: 8px; position: relative; z-index: 1; }
+.header button {
+    padding: 6px 16px; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 12.5px; font-weight: 500;
+    transition: all 0.2s; font-family: inherit;
+}
+.btn-refresh {
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.btn-refresh:hover { background: rgba(255,255,255,0.18); }
+.btn-clear {
+    background: rgba(220,38,38,0.15); color: #fca5a5;
+    border: 1px solid rgba(220,38,38,0.2) !important;
+}
+.btn-clear:hover { background: rgba(220,38,38,0.25); }
+
+/* ─── Stats ─── */
+.stats {
+    display: flex; align-items: center;
+    margin: 14px 28px 0; padding: 0;
+    background: var(--bg-card); border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden; flex-shrink: 0;
+}
+.stat-item {
+    flex: 1; display: flex; align-items: baseline; gap: 8px;
+    padding: 14px 20px;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+}
+.stat-item:first-child { border-left: none; }
+.stat-item:not(:last-child) { border-right: 1px solid var(--border); }
+.stat-item:hover { background: #fafbfc; }
+.stat-item.total { border-left-color: var(--info); }
+.stat-item.error { border-left-color: var(--error); }
+.stat-item.perf { border-left-color: var(--success); }
+.stat-item.behavior { border-left-color: var(--accent); }
+.stat-item .label {
+    font-size: 12px; color: var(--text-muted); font-weight: 500;
+}
+.stat-item .value { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; line-height: 1; }
+.stat-item.total .value { color: var(--info); }
+.stat-item.error .value { color: var(--error); }
+.stat-item.perf .value { color: var(--success); }
+.stat-item.behavior .value { color: var(--accent); }
+
+/* ─── Filters ─── */
+.filters {
+    padding: 12px 28px 0; display: flex; gap: 10px;
+    align-items: center; flex-wrap: wrap;
+}
+.filters select, .filters input {
+    padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px; outline: none; font-family: inherit;
+    transition: all 0.2s; background: #fff; color: var(--text-primary);
+}
+.filters select:focus, .filters input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(217,119,6,0.08);
+}
+.filters input { width: 240px; }
+
+/* ─── Table ─── */
+.table-wrap { padding: 0 28px 28px; flex: 1; }
+table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: var(--bg-card); border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border);
+}
+th {
+    background: #f8fafc; text-align: left; padding: 11px 16px; font-size: 11.5px;
+    color: var(--text-muted); font-weight: 600; letter-spacing: 0.4px;
+    text-transform: uppercase; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 1;
+}
+td {
+    padding: 11px 16px; border-bottom: 1px solid #f1f5f9;
+    font-size: 13px; vertical-align: middle;
+    transition: background 0.15s;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafbfc; }
+
+.tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 10px; border-radius: 6px; font-size: 11.5px;
+    font-weight: 600; letter-spacing: 0.2px;
+}
+.tag-error { background: var(--error-bg); color: var(--error); }
+.tag-perf { background: var(--success-bg); color: var(--success); }
+.tag-behavior { background: var(--accent-light); color: #b45309; }
+
+.detail-btn {
+    color: var(--accent); cursor: pointer; border: none; background: none;
+    font-size: 12.5px; font-weight: 500; font-family: inherit;
+    padding: 4px 10px; border-radius: 6px; transition: all 0.2s;
+}
+.detail-btn:hover { background: var(--accent-light); }
+
+/* ─── Modal ─── */
+.modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(15,23,42,0.5); backdrop-filter: blur(4px);
+    z-index: 1000; justify-content: center; align-items: center;
+}
 .modal-overlay.active { display: flex; }
-.modal { background: #fff; border-radius: 8px; width: 700px; max-height: 80vh; overflow: auto; padding: 20px; }
-.modal h3 { margin-bottom: 12px; }
-.modal pre { background: #f5f5f5; padding: 12px; border-radius: 4px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
-.modal .close-btn { float: right; cursor: pointer; font-size: 20px; color: #999; }
-.empty { text-align: center; padding: 60px; color: #999; font-size: 14px; }
+.modal {
+    background: #fff; border-radius: 16px; width: 700px;
+    max-height: 80vh; overflow: auto; padding: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    animation: modalIn 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal h3 { margin-bottom: 14px; font-size: 15px; font-weight: 700; }
+.modal pre {
+    background: #1e293b; color: #e2e8f0; padding: 16px;
+    border-radius: 10px; font-size: 12px; overflow-x: auto;
+    white-space: pre-wrap; word-break: break-all; line-height: 1.55;
+}
+.modal .close-btn {
+    float: right; cursor: pointer; font-size: 20px; color: var(--text-muted);
+    width: 30px; height: 30px; display: flex; align-items: center;
+    justify-content: center; border-radius: 8px; transition: all 0.2s;
+}
+.modal .close-btn:hover { background: #f1f5f9; color: var(--text-primary); }
+
+.empty {
+    text-align: center; padding: 80px 40px; color: var(--text-muted);
+    font-size: 14px;
+}
+.empty::before {
+    content: '📭'; display: block; font-size: 36px; margin-bottom: 12px; opacity: 0.5;
+}
 </style>
 </head>
 <body>
@@ -210,17 +397,17 @@ tr:hover { background: #f5f5f5; }
 <!-- 右侧 Dashboard -->
 <div class="main-content">
     <div class="header">
-        <h1>Monitor Dashboard</h1>
+        <h1>Monitor Dashboard<span>Performance Monitoring</span></h1>
         <div class="actions">
             <button class="btn-refresh" onclick="loadData()">刷新数据</button>
             <button class="btn-clear" onclick="clearData()">清空数据</button>
         </div>
     </div>
     <div class="stats">
-        <div class="stat-card total"><div class="label">总数</div><div class="value" id="stat-total">0</div></div>
-        <div class="stat-card error"><div class="label">错误</div><div class="value" id="stat-error">0</div></div>
-        <div class="stat-card perf"><div class="label">性能</div><div class="value" id="stat-perf">0</div></div>
-        <div class="stat-card behavior"><div class="label">行为</div><div class="value" id="stat-behavior">0</div></div>
+        <div class="stat-item total"><span class="label">总数</span><span class="value" id="stat-total">0</span></div>
+        <div class="stat-item error"><span class="label">错误</span><span class="value" id="stat-error">0</span></div>
+        <div class="stat-item perf"><span class="label">性能</span><span class="value" id="stat-perf">0</span></div>
+        <div class="stat-item behavior"><span class="label">行为</span><span class="value" id="stat-behavior">0</span></div>
     </div>
     <div class="filters">
         <select id="filter-type" onchange="renderTable()">
@@ -351,33 +538,72 @@ function closeModal() { document.getElementById('modal').classList.remove('activ
 async function clearData() {
     if (!confirm('确定清空所有数据？')) return;
     await fetch('/clearMonitorData', { method: 'POST' });
-    // SSE 的 clear 事件会自动刷新界面
 }
 
-// ─── AI 分析助手功能 ───
-function clearChat() {
+// ─── marked 配置：代码高亮 ───
+marked.setOptions({
+    highlight: function(code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(code, { language: lang }).value;
+        }
+        return hljs.highlightAuto(code).value;
+    },
+    breaks: false
+});
+
+function patchIncompleteMarkdown(text) {
+    const codeBlockCount = (text.match(/```/g) || []).length;
+    if (codeBlockCount % 2 !== 0) text += '\n```';
+    const inlineCodeMatches = text.match(/(?<!`)`(?!`)/g);
+    if (inlineCodeMatches && inlineCodeMatches.length % 2 !== 0) text += '`';
+    const boldCount = (text.match(/\*\*/g) || []).length;
+    if (boldCount % 2 !== 0) text += '**';
+    return text;
+}
+
+function autoScroll() {
     const container = document.getElementById('ai-messages');
-    container.innerHTML = '<div class="ai-msg ai-msg-ai">对话已清空，随时可以继续提问 👋</div>';
+    const threshold = 100;
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
+    if (isNearBottom) container.scrollTop = container.scrollHeight;
+}
+
+let _renderTimer = null;
+let _pendingDiv = null;
+let _pendingContent = '';
+
+function scheduleRender(div, content) {
+    _pendingDiv = div;
+    _pendingContent = content;
+    if (_renderTimer) return;
+    _renderTimer = setTimeout(() => {
+        const patched = patchIncompleteMarkdown(_pendingContent);
+        _pendingDiv.innerHTML = marked.parse(patched);
+        autoScroll();
+        _renderTimer = null;
+    }, 50);
+}
+
+function renderNow(div, content) {
+    if (_renderTimer) { clearTimeout(_renderTimer); _renderTimer = null; }
+    div.innerHTML = marked.parse(content);
+    autoScroll();
+}
+
+function clearChat() {
+    document.getElementById('ai-messages').innerHTML =
+        '<div class="ai-msg ai-msg-ai">对话已清空，随时可以继续提问 👋</div>';
 }
 
 function appendAIMessage(type, content) {
     const container = document.getElementById('ai-messages');
     const div = document.createElement('div');
     div.className = 'ai-msg ai-msg-' + type;
-    if (type === 'ai') {
-        div.innerHTML = marked.parse(content);
-    } else {
-        div.textContent = content;
-    }
+    if (type === 'ai') { div.innerHTML = marked.parse(content); }
+    else { div.textContent = content; }
     container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
+    autoScroll();
     return div;
-}
-
-function updateAIMessage(div, content) {
-    div.innerHTML = marked.parse(content);
-    const container = document.getElementById('ai-messages');
-    container.scrollTop = container.scrollHeight;
 }
 
 async function askAI() {
@@ -386,17 +612,13 @@ async function askAI() {
     if (!query) return;
     input.value = '';
     appendAIMessage('user', query);
-
     const thinkingEl = appendAIMessage('system', '🤔 正在分析中...');
 
     try {
-        // 使用 SSE 流式请求
         const response = await fetch('/agent/analyze/stream?query=' + encodeURIComponent(query));
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
-        let answerEl = null;
-        let answerBuffer = '';
-        let buffer = '';
+        let answerEl = null, answerBuffer = '', buffer = '';
 
         while (true) {
             const { done, value } = await reader.read();
@@ -410,20 +632,15 @@ async function askAI() {
                 if (!trimmed || !trimmed.startsWith('data: ')) continue;
                 const data = trimmed.slice(6);
                 if (data === '[DONE]') continue;
-
                 try {
                     const step = JSON.parse(data);
-                    if (step.type === 'tool_call') {
-                        appendAIMessage('system', '🔧 调用工具: ' + step.name);
-                    } else if (step.type === 'tool_result') {
-                        appendAIMessage('system', '📋 工具返回了 ' + (step.result.total || step.result.items?.length || 0) + ' 条数据');
-                    } else if (step.type === 'answer') {
+                    if (step.type === 'answer') {
                         if (!answerEl) {
                             thinkingEl.remove();
                             answerEl = appendAIMessage('ai', step.content);
                         } else {
                             answerBuffer = step.content;
-                            updateAIMessage(answerEl, answerBuffer);
+                            renderNow(answerEl, answerBuffer);
                         }
                     } else if (step.type === 'chunk') {
                         if (!answerEl) {
@@ -432,7 +649,7 @@ async function askAI() {
                             answerBuffer = '';
                         }
                         answerBuffer += step.content;
-                        updateAIMessage(answerEl, answerBuffer);
+                        scheduleRender(answerEl, answerBuffer);
                     } else if (step.type === 'error') {
                         thinkingEl.remove();
                         appendAIMessage('error', '❌ ' + step.content);
@@ -440,10 +657,8 @@ async function askAI() {
                 } catch {}
             }
         }
-        if (!answerEl) {
-            thinkingEl.remove();
-            appendAIMessage('ai', '分析完成。');
-        }
+        if (answerEl && _renderTimer) renderNow(answerEl, _pendingContent);
+        if (!answerEl) { thinkingEl.remove(); appendAIMessage('ai', '分析完成。'); }
     } catch (e) {
         thinkingEl.remove();
         appendAIMessage('error', '❌ 请求失败: ' + e.message);
@@ -458,14 +673,10 @@ async function quickHealthCheck() {
         let msg = data.summary + '\n';
         if (data.anomalies && data.anomalies.length > 0) {
             msg += '\n异常详情:';
-            data.anomalies.forEach(a => {
-                msg += '\n⚠️ [' + a.severity.toUpperCase() + '] ' + a.message;
-            });
+            data.anomalies.forEach(a => { msg += '\n⚠️ [' + a.severity.toUpperCase() + '] ' + a.message; });
         }
         appendAIMessage('ai', msg);
-    } catch (e) {
-        appendAIMessage('error', '❌ 健康检查失败: ' + e.message);
-    }
+    } catch (e) { appendAIMessage('error', '❌ 健康检查失败: ' + e.message); }
 }
 
 async function generateReport() {
@@ -473,40 +684,24 @@ async function generateReport() {
     try {
         const resp = await fetch('/agent/report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
         const data = await resp.json();
-        if (data.success) {
-            appendAIMessage('ai', data.report);
-        } else {
-            appendAIMessage('error', '❌ ' + (data.error || '报告生成失败'));
-        }
-    } catch (e) {
-        appendAIMessage('error', '❌ 报告生成失败: ' + e.message);
-    }
+        if (data.success) { appendAIMessage('ai', data.report); }
+        else { appendAIMessage('error', '❌ ' + (data.error || '报告生成失败')); }
+    } catch (e) { appendAIMessage('error', '❌ 报告生成失败: ' + e.message); }
 }
 
-// 初始加载全量数据
 loadData();
 
-// SSE 实时监听，有新数据增量更新，不再轮询
 const evtSource = new EventSource('/events');
-
 evtSource.addEventListener('newData', (e) => {
     const record = JSON.parse(e.data);
     allItems.unshift(record);
-    updateStats();
-    updateSubtypes();
-    renderTable();
+    updateStats(); updateSubtypes(); renderTable();
 });
-
 evtSource.addEventListener('clear', () => {
     allItems = [];
-    updateStats();
-    updateSubtypes();
-    renderTable();
+    updateStats(); updateSubtypes(); renderTable();
 });
-
-evtSource.onerror = () => {
-    console.warn('SSE 连接断开，自动重连中...');
-};
+evtSource.onerror = () => { console.warn('SSE 连接断开，自动重连中...'); };
 </script>
 </body>
 </html>
